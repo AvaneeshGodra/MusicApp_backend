@@ -63,27 +63,25 @@ export const userController={
     }
    } ,
    
-   async liked(req,res){
-    const consult=req.body;
-    try{
-        if(await likedModel.findOne(consult)){
-            res.json({message:'song already added'});
-        }
-
-      
-        
-        else{
-            const doc=await likedModel.create(consult);
-            res.json({message:'Song added to liked'});
-        }
+   async liked(req, res) {
+    const { email, artistName, songNmae, image } = req.body;
+  
+    try {
+      // Check for uniqueness based on email, artistName, and songNmae
+      const existingEntry = await likedModel.findOne({ email, artistName, songNmae });
+  
+      if (existingEntry) {
+        res.json({ message: 'Song already added to liked' });
+      } else {
+        // If not found, create a new entry
+        const doc = await likedModel.create({ email, artistName, songNmae, image });
+        res.json({ message: 'Song added to liked' });
+      }
+    } catch (err) {
+      res.json({ message: 'Error adding the liked song' });
     }
-    catch(err){
-       
-        res.json({message:'Error adding the liked song'});
-    }
-     
-    
-    },
+  },
+  
     async getliked(req,res){
         try{
             const doc=await likedModel.find({'email':req.body.email}).exec();
