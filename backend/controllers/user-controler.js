@@ -65,23 +65,32 @@ export const userController={
    
    async liked(req, res) {
     const { email, artistName, songNmae, image } = req.body;
+    console.log(email);
   
     try {
-      // Check for uniqueness based on email, artistName, and songNmae
       const existingEntry = await likedModel.findOne({ email, artistName, songNmae });
   
       if (existingEntry) {
         res.json({ message: 'Song already added to liked' });
       } else {
-        // If not found, create a new entry
+        // If no existing entry found, create a new entry
         const doc = await likedModel.create({ email, artistName, songNmae, image });
         res.json({ message: 'Song added to liked' });
       }
     } catch (err) {
-      res.json({ message: 'Error adding the liked song' });
+      if (err.code === 11000) {
+        // Handle duplicate key error for songNmae
+        res.json({ message: 'Song already exists in liked songs' });
+      } else {
+        // Handle other errors
+        console.error(err);
+        res.json({ message: 'Error adding the liked song' });
+      }
     }
-  },
+  }
   
+  ,
+
     async getliked(req,res){
         try{
             const doc=await likedModel.find({'email':req.body.email}).exec();
