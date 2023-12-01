@@ -65,14 +65,16 @@ export const userController={
    
    async liked(req,res){
     const consult=req.body;
-   
     try{
-        const doc=await likedModel.create(consult);
-        if(doc && doc._id){
-            res.json({message:'Song added to liked'});
-        }
-        else{
+        if(await likedModel.findOne(consult)){
             res.json({message:'song already added'});
+        }
+
+      
+        
+        else{
+            const doc=await likedModel.create(consult);
+            res.json({message:'Song added to liked'});
         }
     }
     catch(err){
