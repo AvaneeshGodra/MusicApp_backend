@@ -8,7 +8,7 @@ const likedSchema=new Schema({
     "artistName": {type:SchemaTypes.String},
     "songNmae": {type:SchemaTypes.String,required:true,unique:true},
     "image": {type:SchemaTypes.String},
-    "previewUrl":{type:SchemaTypes.String, maxlength: 500}
+    "previewUrl": {type:SchemaTypes.String, maxlength: 500}
 });
 likedSchema.index({ email: 1, artistName: 1, songNmae: 1 }, { unique: true });
 export const likedModel=mongoose.model('liked_songs',likedSchema);

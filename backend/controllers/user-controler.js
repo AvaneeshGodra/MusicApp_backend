@@ -64,7 +64,7 @@ export const userController={
    } ,
    
    async liked(req, res) {
-    const { email, artistName, songNmae, image } = req.body;
+    const { email, artistName, songNmae, image ,previewUrl} = req.body;
     console.log(email);
   
     try {
@@ -74,7 +74,7 @@ export const userController={
         res.json({ message: 'Song already added to liked' });
       } else {
         // If no existing entry found, create a new entry
-        const doc = await likedModel.create({ email, artistName, songNmae, image });
+        const doc = await likedModel.create({ email, artistName, songNmae, image ,previewUrl});
         res.json({ message: 'Song added to liked' });
       }
     } catch (err) {
